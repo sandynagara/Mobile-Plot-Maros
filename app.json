@@ -1,15 +1,10 @@
 {
   "expo": {
-    "name": "MakassarPlot",
-    "slug": "MakassarPlot",
+    "name": "Cek Plot Maros",
+    "slug": "Cek_Plot_Maros",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -21,9 +16,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/favicon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.bpn.cekPlot",
+      "config": {
+        "googleMaps": {
+            "apiKey": "AIzaSyAqCVpRwvya3LsllMTUf-znaZkpVE1yehI"
       }
+    }
     },
     "web": {
       "favicon": "./assets/favicon.png"
