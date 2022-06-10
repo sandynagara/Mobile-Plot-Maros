@@ -12,10 +12,12 @@ const Header = ({data,navigation}) => {
     navigation.navigate('Login')
   }
 
+  console.log(data,"data")
+
   return (
     <View style={tw`w-full px-4 py-3 bg-white flex-row items-center`}>
         <Icon name="user" size={35} color="black"/>
-      <Text style={tw`font-bold text-lg ml-2`}>{data &&  data["MSG"]["nama"]}</Text>
+      <Text style={tw`font-bold text-lg ml-2`}>{data && data["MSG"] !== null &&  data["MSG"]["nama"]}</Text>
 
           <Icon2 name="logout" size={20} color="red" style={tw`absolute right-5`} onPress={logOut}/>
   

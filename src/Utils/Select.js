@@ -16,8 +16,11 @@ const Select = ({select, setSelect}) => {
             }
             style={[tw`text-black  w-full rounded-sm`]}
         >
-            <Picker.Item label="Milik" value="milik"  />
-            <Picker.Item label="Sewa" value="sewa" />
+            <Picker.Item label="Hak Milik" value="milik"  />
+            <Picker.Item label="Hak Guna Bangunan" value="guna bangunan" />
+            <Picker.Item label="Hak Pakai" value="pakai" />
+            <Picker.Item label="Hak Guna Usaha" value="guna usaha" />
+            <Picker.Item label="Hak Sewa" value="sewa" />
         </Picker>
         </View>
     </View>

@@ -15,7 +15,6 @@ const DetailPengajuan = ({navigation,route}) => {
     ]);
 
     useEffect(() => {
-      console.log(route)
       const id = route["params"]["data"]
       const url = configData.Developer_API+"pengajuan/"+id
       fetch(url,{

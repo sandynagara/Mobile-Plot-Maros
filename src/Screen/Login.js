@@ -61,7 +61,37 @@ const Login = ({navigation}) => {
             setLoading(false)
             console.log(err)
         })
-       
+    }
+
+    const cekLupaPassword = () => {
+        setLoading(true)
+        const url = configData.Developer_API + "pertanyaan"
+        fetch(url,{
+            method:"POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+            }),
+        }).then(res=>res.json()).
+        then((res)=>{
+            console.log(res)
+            if(res["RTN"]){
+                setLoading(false)
+                navigation.navigate('Lupa Password', {
+                    data: res["data"],
+                });
+            }else{
+                setLoading(false)
+                setResponse(res)
+                console.log("gagal")
+            }
+        }).catch(err=>{
+            setLoading(false)
+            console.log(err)
+        })
     }
 
   return (
@@ -84,6 +114,12 @@ const Login = ({navigation}) => {
             secureTextEntry={true}
             onChangeText={(pass)=>{setPass(pass)}}
         />
+        <View style={tw`w-full flex justify-start`}>
+            <Pressable onPress={()=>cekLupaPassword()}>
+                <Text style={tw`text-sky-500 mt-2 text-left`}>Lupa Password?</Text>
+            </Pressable>
+        </View>
+        
         <Pressable style={[tw`bg-sky-500 py-3 w-full rounded-sm mt-3`,status && tw`bg-gray-300`]} 
             onPress={()=>{
                 if(!status){
@@ -94,7 +130,6 @@ const Login = ({navigation}) => {
             <View>
                 {loading ? <ActivityIndicator color="#ffffff"/> : <Text style={tw`text-white text-center font-bold`}>LOGIN</Text>}
             </View>
-           
         </Pressable>
         {response && 
                 <View

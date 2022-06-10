@@ -1,3 +1,10 @@
 {
-    "Developer_API":"http://localhost:5000/api/"
+    "Developer_API":"https://kantahmaros.com/api/",
+    "Developer_Geoserver_API":"https://kantahmaros.com:8080/",
+    "Simpan":{
+        "SERVER_API_Develop": "http://localhost:5000/api/",
+        "SERVER_GEOSERVER_Develop": "http://localhost:8080/",
+        "SERVER_API": "https://kantahmaros.com/api/",
+        "SERVER_GEOSERVER": "https://kantahmaros.com:8080//"
+    }
 }

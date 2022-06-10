@@ -1,13 +1,15 @@
 import { View, Text,KeyboardAvoidingView,ScrollView,ActivityIndicator,Pressable } from 'react-native'
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import tw from 'twrnc';
 import configData from "../config/config.json"
 import InputData from '../Utils/InputData';
 import InputImage from '../Utils/InputImage';
 import ViewImage from '../Utils/ViewImage';
 import Popup from '../Utils/Popup';
+import CameraInput from '../Utils/CameraInput';
+import PopupQusetion from '../Utils/PopupQuestion';
 
-const DataDiri = ({}) => {
+const DataDiri = ({navigation}) => {
 
     const [namaLengkap, setNamaLengkap] = useState("");
     const [nik, setNIK] = useState("");
@@ -19,6 +21,9 @@ const DataDiri = ({}) => {
     const [loading, setLoading] = useState(false)
     const [modalVisible, setModalVisible] = useState(false);
     const [result,setResult] = useState(false)
+
+    const [modalVisibleQuestion, setModalVisibleQuestion] = useState(false);
+    const [update, setUpdate] = useState(false);
 
     useEffect(() => {
         const url = `${configData.Developer_API}profil`
@@ -60,8 +65,13 @@ const DataDiri = ({}) => {
         }).catch(err=>console.log(err))
     }, [])
 
-   
+    useEffect(() => {
+      if(update){
+          updateProfile()
+      }
+    }, [update])
     
+
     const updateProfile = () => {
         setLoading(true)
         var body = new FormData();
@@ -88,14 +98,21 @@ const DataDiri = ({}) => {
             setLoading(false)
             setModalVisible(true)
             setResult(res)
+            setUpdate(false)
         }).catch(err=>{
             setModalVisible(true)
             setLoading(false)
+            setUpdate(false)
         })
+    }
+
+    const getSignature = () => {
+        navigation.navigate("Signature",{handleItem: (item) => setFotoTandaTangan({ganti:true,uri:item})})
     }
 
   return (  
     <View style={[tw`h-full w-full py-2`]}>
+       
         <ScrollView style={tw`px-4`}>
             
             {/* <InputData judul="Username" margin={"mt-2 font-bold"}/>
@@ -110,23 +127,28 @@ const DataDiri = ({}) => {
 
             <Text style={[tw`font-bold mt-2`]}>Foto Selfie</Text>
             {fotoSelfie &&  <ViewImage image={fotoSelfie}/>} 
-            <InputImage setImage={setFotoSelfie}/>
+            <CameraInput setImage={setFotoSelfie}/>
 
-            <Text style={[tw`font-bold mt-2`]}>Foto Tanda Tangan</Text>
+            <Text style={[tw`font-bold mt-2`]}>Tanda Tangan</Text>
             {fotoTandaTangan &&  <ViewImage image={fotoTandaTangan}/>} 
-            <InputImage setImage={setFotoTandaTangan}/>
 
+            <Pressable onPress={()=>{getSignature()}}>
+                <View style={[tw`w-full mt-2  bg-gray-200 items-center p-3 rounded-md flex-row justify-center`]}>
+                    <Text style={[tw`text-gray-500  font-bold ml-3` ]}>Ambil Tanda Tangan</Text>
+                </View>
+            </Pressable>
+            
         </ScrollView>
         <KeyboardAvoidingView
         behavior="position"
         enabled={false}
         >   
-            <Pressable style={[tw`px-4`]} onPress={updateProfile}>
+            <Pressable style={[tw`px-4`]} onPress={()=>setModalVisibleQuestion(true)}>
             <View style={[tw`w-full mt-2 bg-sky-500 items-center p-3 rounded-md`]}>
                   {loading ? <ActivityIndicator color="#ffffff"/> : <Text style={[tw`text-white font-bold` ]}>SIMPAN</Text>}
             </View>
         </Pressable>
-        
+        <PopupQusetion modalVisible={modalVisibleQuestion} setModalVisible={setModalVisibleQuestion} setUpload={setUpdate}/>
         <Popup modalVisible={modalVisible} pesan={result["MSG"]} type={result["RTN"]} setModalVisible={setModalVisible} />
         </KeyboardAvoidingView> 
         

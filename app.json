@@ -23,7 +23,9 @@
       "config": {
         "googleMaps": {
             "apiKey": "AIzaSyAqCVpRwvya3LsllMTUf-znaZkpVE1yehI"
-      }
+      },"permissions":[
+        "CAMERA"
+      ]
     }
     },
     "web": {

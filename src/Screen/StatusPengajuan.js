@@ -14,7 +14,6 @@ const StatusPengajuan = ({navigation}) => {
       method:"GET",
       credentials:"include"
     }).then(res=>res.json()).then(res=>{
-      console.log(res,"json")
       setData(res)
     }).catch((err)=>console.log(err))
   }, [])

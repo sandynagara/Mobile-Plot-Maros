@@ -3,7 +3,7 @@ import React,{useState,useEffect} from 'react'
 import tw from 'twrnc';
 import Footer from '../Footer/Footer';
 import configData from "../config/config.json"
-import Icon from 'react-native-vector-icons/AntDesign';
+import {Picker} from '@react-native-picker/picker';
 
 const Register = ({navigation}) => {
 
@@ -13,11 +13,13 @@ const Register = ({navigation}) => {
     const [confirm, setConfirm] = useState("")
     const [status, setStatus] = useState(true)
     const [response, setResponse] = useState(false)
+    const [pertanyaan, setPertanyaan] = useState("Siapa nama teman masa kecil anda?")
+    const [jawaban, setJawaban] = useState("")
 
     const [loading, setLoading] = useState(false)
 
     const cek = () => {
-        if(namaLengkap === "" || username === "" || pass === "" || confirm === ""){
+        if(namaLengkap === "" || jawaban === "" || username === "" || pass === "" || confirm === ""){
             setStatus(true)
             return
         }
@@ -32,7 +34,7 @@ const Register = ({navigation}) => {
 
     useEffect(() => {
         cek()
-    }, [namaLengkap,username,pass,confirm])
+    }, [namaLengkap,username,pass,confirm,jawaban])
 
     const submit = () => {
         setLoading(true)
@@ -47,7 +49,9 @@ const Register = ({navigation}) => {
                 nama:namaLengkap ,
                 username: username,
                 password: pass,
-                kelas:"user"
+                kelas:"user",
+                pertanyaan:pertanyaan,
+                jawaban:jawaban
               }),
             credentials: 'include'
         }).then(res=>res.json()).
@@ -123,7 +127,27 @@ const Register = ({navigation}) => {
                 secureTextEntry={true}
                 onChangeText={(pass)=>{setConfirm(pass)}}
             />
-            
+            <View style={tw` mt-2 w-full border-2 border-gray-300`}>
+                <Picker
+                    selectedValue={pertanyaan}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setPertanyaan(itemValue)
+                    }
+                    style={[tw`text-black  w-full rounded-sm`]}
+                >
+                    <Picker.Item label="Dimana kota tempat anda lahir?" value="Siapa nama teman masa kecil anda?"  />
+                    <Picker.Item label="Dimana anda bersekolah dasar?" value="Apa merek kendaraan pertama anda?" />
+                    <Picker.Item label="Siapa nama hewan peliharaan anda?" value="Siapa nama hewan peliharaan anda?" />
+                    <Picker.Item label="Apa merek kendaraan pertama anda?" value="Dimana anda bersekolah dasar?" />
+                    <Picker.Item label="Siapa nama teman masa kecil anda?" value="Siapa nama teman masa kecil anda?" />
+                </Picker>   
+            </View>
+       
+            <TextInput
+                style={[tw` border-2 mt-3 py-2 px-3 w-full rounded-sm border-gray-300`,confirm == "" && tw`border-red-200`]}
+                placeholder={"Jawaban"}
+                onChangeText={(pass)=>{setJawaban(pass)}}
+            />
             <Pressable style={[tw`bg-sky-500 py-3 w-full rounded-sm mt-3`,status && tw`bg-gray-300`]}
                     onPress={()=>{
                         if(!status && !loading){
@@ -132,7 +156,6 @@ const Register = ({navigation}) => {
                     }}
             >   
                 {loading ? <ActivityIndicator color="#ffffff"/> : <Text style={tw`text-white text-center font-bold`}>BUAT AKUN</Text>}
-                
             </Pressable>
             {response && 
                 <View
@@ -142,7 +165,6 @@ const Register = ({navigation}) => {
                     <Text style={tw`text-white rounded-md text-sm text-center`}>{response["MSG"]}</Text>
                 </View>
             }
-            
             <Footer/>
         </View>
     </KeyboardAvoidingView>

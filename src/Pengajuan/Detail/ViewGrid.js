@@ -23,7 +23,8 @@ const ViewGrid = ({data,id,judul}) => {
                     key={index}
                 >
                     <Image style={[tw`w-20 h-20 rounded-md mr-1`,{resizeMode:"cover" }]} source={{uri:configData.Developer_API+"pengajuan/image/"+id+"&"+image}}/>
-                </Pressable>)
+                </Pressable>
+                )
                     
             })}
             <Modal visible={open} transparent={true} onRequestClose={()=>setOpen(false)}>

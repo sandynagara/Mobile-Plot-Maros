@@ -20,13 +20,16 @@ const Peta = ({navigation,route,koordinatPolygonInput=false}) => {
   ]);
 
   useEffect(async () => {
-    console.log(daftarKoordinat)
     var { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
         return;
     }
-
+    var posisi = await Location.getCurrentPositionAsync({});
+    var koordinat = {
+      koordinat:{latitude:posisi["coords"]["latitude"],longitude:posisi["coords"]["longitude"]}
+    }
+    setLocation(koordinat["koordinat"])
     if(daftarKoordinat.length>2){
       setLocation(daftarKoordinat[0]["koordinat"])
     }
@@ -43,8 +46,7 @@ const Peta = ({navigation,route,koordinatPolygonInput=false}) => {
       
     }
   }, [daftarKoordinat,change])
-  
-  
+
   const getCoordinate = async() => {
     var id = "id" + Math.random().toString(16).slice(2)
     var posisi = await Location.getCurrentPositionAsync({});
@@ -74,7 +76,6 @@ const Peta = ({navigation,route,koordinatPolygonInput=false}) => {
     <View style={[tw`w-full h-full justify-center items-center`]}>
        <MapView
         style={tw`w-full h-full absolute`}
-        //specify our coordinates.
         initialRegion={{
           latitude: -5.134054, 
           longitude: 119.444510,
@@ -87,6 +88,7 @@ const Peta = ({navigation,route,koordinatPolygonInput=false}) => {
           latitudeDelta:  0.0002,
           longitudeDelta: 0.0002,
         }}
+        showsUserLocation={true}
         mapType={"satellite"}
       >
         {daftarKoordinat.length > 0 && daftarKoordinat.map((koordinat,index)=>{

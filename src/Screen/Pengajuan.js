@@ -10,6 +10,7 @@ import InputImageMutiple from '../Utils/InputImageMultiple';
 import Select from '../Utils/Select';
 import Popup from '../Utils/Popup';
 import ViewImageMultiple2 from '../Utils/ViewImageMultiple2';
+import PopupQusetion from '../Utils/PopupQuestion';
 
 const Pengajuan = ({navigation}) => {
 
@@ -30,14 +31,14 @@ const Pengajuan = ({navigation}) => {
     const [fotoBidang, setFotoBidang] = useState(false);
     const [daftarKoordinat, setDaftarKoordinat] = useState([])
     const [koordinatPolygon, setKoordinatPolygon] = useState(false)
-
     const [namaKuasa, setNamaKuasa] = useState("")
     const [check,setCheck] = useState(false)
     const [dataDiri,setDataDiri] = useState(false)
     const [result,setResult] = useState(false)
-
     const [loading, setLoading] = useState(false)
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleQuestion, setModalVisibleQuestion] = useState(false);
+    const [upload, setUpload] = useState(false);
 
     const movePeta = () => {
         navigation.navigate("Peta",
@@ -54,8 +55,13 @@ const Pengajuan = ({navigation}) => {
         setDataDiri(res["RTN"])
       }).catch(err=>console.log(err))
     }, [])
-    
 
+    useEffect(() => {
+      if(upload){
+          submit()
+      }
+    }, [upload])
+    
     useEffect(() => {
         if(daftarKoordinat.length !== 0){
             console.log(daftarKoordinat)
@@ -78,11 +84,9 @@ const Pengajuan = ({navigation}) => {
     }, [kuasa,nomorSuratUkur,nib,namaKuasa,alamatDenah,peruntukan,fotoSelfie,fotoKTP,fotoSertifikat,fotoPbb,fotoStts,fotoAktaJual,koordinatPolygon,fotoBidang])
     
     const checkKelengkapan = () => {
-
         if(!dataDiri){
             return false
         }
-
         if(kuasa === "Sendiri"){
             if(nomorSuratUkur !== "" && nib !=="" && alamatDenah !== "" && peruntukan !== "" &&  fotoSertifikat && fotoPbb && fotoStts && fotoAktaJual && fotoBidang && koordinatPolygon){
                 return true
@@ -108,6 +112,7 @@ const Pengajuan = ({navigation}) => {
         body.append('alamat_denah',alamatDenah)
         body.append('geoJson',JSON.stringify(koordinatPolygon))
         body.append('kuasa',kuasa)
+
         fotoSertifikat.map(image=>{
             body.append('sertifikat',image);
         })
@@ -150,15 +155,16 @@ const Pengajuan = ({navigation}) => {
             setLoading(false)
             setModalVisible(true)
             setResult(res)
+            setUpload(false)
         }).catch(err=>{
             setModalVisible(true)
             setLoading(false)
+            setUpload(false)
         })
     }
     
   return (
     <View>
-      
         <ScrollView style={tw`px-4 bg-white h-11/12`}>
             {!dataDiri && 
                 <View
@@ -168,7 +174,6 @@ const Pengajuan = ({navigation}) => {
                     <Text style={tw`text-white font-bold rounded-md text-sm text-center`}>Mohon lengkapi terlebih dahulu</Text>
                 </View>
             }
-            
             <View style={tw`mt-2`}>
                 <Text style={[tw`font-bold text-xl`]}>Kuasa Tanah</Text>
                 <View style={tw`flex-row w-full mt-2`}>
@@ -247,21 +252,20 @@ const Pengajuan = ({navigation}) => {
             </View>
              
         </ScrollView>
-
+        <PopupQusetion modalVisible={modalVisibleQuestion} setModalVisible={setModalVisibleQuestion} setUpload={setUpload}/>
         <Popup modalVisible={modalVisible} pesan={result["MSG"]} type={result["RTN"]} setModalVisible={setModalVisible} />
 
         <Pressable 
             style={[tw`px-4`]}
             onPress={()=>{
                 if(check && !loading){  
-                    submit()
+                    setModalVisibleQuestion(true)
                 }
                 }
             }
         >   
             <View style={[tw`w-full flex-row mt-2 bg-sky-500 items-center justify-center p-3 rounded-md`,!check && tw`bg-gray-300`]}>
                 {loading ? <ActivityIndicator color="#ffffff"/> : <Text style={[tw`text-white font-bold` ]}>Ajukan</Text>}
-                
             </View>
         </Pressable>
     </View>
