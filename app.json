@@ -20,12 +20,16 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.bpn.cekPlot",
+      "permissions":[
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
       "config": {
         "googleMaps": {
             "apiKey": "AIzaSyAqCVpRwvya3LsllMTUf-znaZkpVE1yehI"
-      },"permissions":[
-        "CAMERA"
-      ]
+      }
     }
     },
     "web": {
